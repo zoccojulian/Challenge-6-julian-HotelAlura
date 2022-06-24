@@ -32,6 +32,11 @@ public class ReservaController {
 		this.reservaDAO.eliminar(idReserva);
 		
 	}
+
+	public void modificar(Reserva reserva) {
+		this.reservaDAO.modificar(reserva);
+		
+	}
 	
 	
 	

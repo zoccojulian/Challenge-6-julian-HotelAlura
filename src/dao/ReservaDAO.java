@@ -118,4 +118,30 @@ public class ReservaDAO {
 
 	}
 
+	public void modificar(Reserva reserva) {
+		try {
+
+			final PreparedStatement statement = con.prepareStatement(
+					"UPDATE RESERVA SET "
+					+ "INGRESO = ?, "
+					+ "EGRESO = ?, "
+					+ "PAGO = ?, "
+					+ "PRECIO = ? "
+					+ "WHERE ID = ?");
+
+			try (statement) {
+				statement.setDate(1, UtilitarioFecha.tranformarADateSQL(reserva.getIngreso()));
+				statement.setDate(2, UtilitarioFecha.tranformarADateSQL(reserva.getEgreso()));
+				statement.setString(3, reserva.getPago());
+				statement.setBigDecimal(4, new BigDecimal(reserva.getPrecio()));
+				statement.setInt(5, reserva.getId());
+				statement.execute();
+			}
+
+		} catch (SQLException e1) {
+			throw new RuntimeException(e1);
+		}
+		
+	}
+
 }
