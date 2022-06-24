@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jcalendar/lib/jcalendar-1.4.jar" sourcepath="C:/Program Files/Java/jcalendar/lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jcalendar/lib/jgoodies-common-1.2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jcalendar/lib/jgoodies-looks-2.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jcalendar/lib/junit-4.6.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.26.jar"/>
+	<classpathentry kind="lib" path="C:/Users/EDICION/.m2/repository/com/mchange/c3p0/0.9.5.5/c3p0-0.9.5.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/EDICION/.m2/repository/com/mchange/mchange-commons-java/0.2.20/mchange-commons-java-0.2.20.jar"/>
+	<classpathentry kind="lib" path="C:/Users/EDICION/.m2/repository/com/google/protobuf/protobuf-java/3.11.4/protobuf-java-3.11.4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
