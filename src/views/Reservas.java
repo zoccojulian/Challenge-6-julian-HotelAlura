@@ -36,6 +36,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class Reservas extends JFrame {
 
@@ -232,23 +233,4 @@ public class Reservas extends JFrame {
 		return precioDia.valorEstadia(fechaEntrada.until(fechasalida, ChronoUnit.DAYS));
 
 	}
-
-//	private static void addPopup(Component component, final JPopupMenu popup) {
-//		component.addMouseListener(new MouseAdapter() {
-//			public void mousePressed(MouseEvent e) {
-//				if (e.isPopupTrigger()) {
-//					showMenu(e);
-//				}
-//			}
-//			public void mouseReleased(MouseEvent e) {
-//				if (e.isPopupTrigger()) {
-//					showMenu(e);
-//				}
-//			}
-//			private void showMenu(MouseEvent e) {
-//				popup.show(e.getComponent(), e.getX(), e.getY());
-//			}
-//		});
-//	}
-
 }

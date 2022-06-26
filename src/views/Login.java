@@ -6,13 +6,21 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controller.UsuarioController;
+import dao.Usuario;
+import dao.UsuarioDAO;
+import factory.ConnectionFactory;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 
@@ -21,6 +29,7 @@ public class Login extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtUsuario;
 	private JPasswordField txtContrasena;
+	private UsuarioController usuarioController;
 
 	/**
 	 * Launch the application.
@@ -42,6 +51,8 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		
+		usuarioController = new UsuarioController();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/imagenes/perfil-del-usuario.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 538);
@@ -79,10 +90,14 @@ public class Login extends JFrame {
 		btnLogin.setIcon(new ImageIcon(Login.class.getResource("/imagenes/perfil-del-usuario.png")));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuUsuario usuario = new MenuUsuario();
-				usuario.setVisible(true);
-				dispose();
+				
+				if(loginUsuario(new Usuario(txtUsuario.getText(), String.valueOf(txtContrasena.getPassword())))) {
+					MenuUsuario usuario = new MenuUsuario();
+					usuario.setVisible(true);
+					dispose();
+				}
 			}
+
 		});
 		btnLogin.setBounds(409, 322, 103, 33);
 		contentPane.add(btnLogin);
@@ -96,5 +111,21 @@ public class Login extends JFrame {
 		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Genesys\\Documents\\imagenesAluraHotel\\Ha-100px.png"));
 		lblNewLabel_1.setBounds(470, 30, 103, 94);
 		contentPane.add(lblNewLabel_1);
+	}
+	
+	
+	private boolean loginUsuario(Usuario usuario) {
+		
+		List<Usuario> usuarioEncontrado = usuarioController.buscarUsuario(usuario);
+		
+
+		if(usuarioEncontrado.size() == 0) {
+			JOptionPane.showMessageDialog(null,"El usuario ingresado no existe");
+			return false;
+		}else if(!usuarioEncontrado.get(0).getPassword().equals(usuario.getPassword())) {
+			JOptionPane.showMessageDialog(null,"El password es incorrecto");
+			return false;
+		}else return true;
+		
 	}
 }

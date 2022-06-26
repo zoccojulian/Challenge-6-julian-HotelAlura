@@ -38,11 +38,12 @@ public class ReservaController {
 		
 	}
 
-	public List<Reserva> buscar(String busqueda) {
-		return reservaDAO.buscar(busqueda);
+	public List<Reserva> buscar(String busqueda, String campo) {
+		return reservaDAO.buscar(busqueda, campo);
 		
 	}
-	
+
+
 	
 	
 	

@@ -144,16 +144,30 @@ public class ReservaDAO {
 		
 	}
 
-	public List<Reserva> buscar(String busqueda) {
+	public List<Reserva> buscar(String busqueda, String campo) {
 		List<Reserva> resultado = new ArrayList<Reserva>();
 		try {
 
-			final PreparedStatement statement = con.prepareStatement("SELECT R.ID, R.INGRESO, R.EGRESO, R.PAGO,"
-					+ " R.PRECIO, H.ID, H.NOMBRE, H.APELLIDO, H.NACIMIENTO, H.NACIONALIDAD,  H.TELEFONO, H.ID_RESERVA FROM RESERVA R INNER JOIN"
-					+ " HUESPED H ON H.ID_RESERVA = R.ID WHERE H.NOMBRE LIKE '%' ? '%'");
 			
-			statement.setString(1, busqueda);
-
+			final PreparedStatement statement;
+			if(campo == "NOMBRE") {
+				statement = con.prepareStatement("SELECT R.ID, R.INGRESO, R.EGRESO, R.PAGO,"
+						+ " R.PRECIO, H.ID, H.NOMBRE, H.APELLIDO, H.NACIMIENTO, H.NACIONALIDAD,  H.TELEFONO, H.ID_RESERVA FROM RESERVA R INNER JOIN"
+						+ " HUESPED H ON H.ID_RESERVA = R.ID WHERE H.NOMBRE LIKE '%' ? '%'");
+				statement.setString(1, busqueda);
+			}else if (campo == "APELLIDO") {
+				statement = con.prepareStatement("SELECT R.ID, R.INGRESO, R.EGRESO, R.PAGO,"
+						+ " R.PRECIO, H.ID, H.NOMBRE, H.APELLIDO, H.NACIMIENTO, H.NACIONALIDAD,  H.TELEFONO, H.ID_RESERVA FROM RESERVA R INNER JOIN"
+						+ " HUESPED H ON H.ID_RESERVA = R.ID WHERE H.APELLIDO LIKE '%' ? '%'");
+				statement.setString(1, busqueda);
+			}else {
+				statement = con.prepareStatement("SELECT R.ID, R.INGRESO, R.EGRESO, R.PAGO,"
+						+ " R.PRECIO, H.ID, H.NOMBRE, H.APELLIDO, H.NACIMIENTO, H.NACIONALIDAD,  H.TELEFONO, H.ID_RESERVA FROM RESERVA R INNER JOIN"
+						+ " HUESPED H ON H.ID_RESERVA = R.ID WHERE H.ID_RESERVA = ?");
+				statement.setInt(1, Integer.parseInt(busqueda));
+			}
+			
+			
 			try (statement) {
 				statement.execute();
 

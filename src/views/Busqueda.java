@@ -27,12 +27,15 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import java.awt.Toolkit;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class Busqueda extends JFrame {
 
@@ -137,7 +140,15 @@ public class Busqueda extends JFrame {
 		lblNewLabel_2.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/Ha-100px.png")));
 		lblNewLabel_2.setBounds(25, 10, 104, 107);
 		contentPane.add(lblNewLabel_2);
-		setResizable(false);
+
+		JComboBox txtCampoBusqueda = new JComboBox();
+		txtCampoBusqueda.setModel(new DefaultComboBoxModel(new String[] { "NOMBRE", "APELLIDO", "ID_RESERVA" }));
+		txtCampoBusqueda.setBounds(647, 56, 121, 22);
+		contentPane.add(txtCampoBusqueda);
+
+		JLabel lblLabelBuscarPor = new JLabel("Buscar por:");
+		lblLabelBuscarPor.setBounds(647, 42, 71, 14);
+		contentPane.add(lblLabelBuscarPor);
 
 		// creo el modelo de la tabla huesped, y cargo los datos.
 		modeloHuesped = (DefaultTableModel) tbHuespedes.getModel();
@@ -156,9 +167,26 @@ public class Busqueda extends JFrame {
 
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Reserva> encontrado = buscar(txtBuscar.getText());
-				limpiarTablas();
-				cargarTablasBusqueda(encontrado);
+
+				List<Reserva> encontrado = new ArrayList<>();
+
+				if (txtCampoBusqueda.getSelectedItem().toString() == "ID_RESERVA") {
+
+					try {
+						Integer numero = Integer.parseInt(txtBuscar.getText());
+					} catch (Exception e3) {
+						JOptionPane.showMessageDialog(null,
+								"Para buscar por ID_RESERVA tiene que ingresar solo numeros");
+						return;
+					}
+				}
+
+				encontrado = buscar(txtBuscar.getText(), txtCampoBusqueda.getSelectedItem().toString());
+				if (encontrado.size() != 0) {
+					limpiarTablas();
+					cargarTablasBusqueda(encontrado);
+				} else
+					JOptionPane.showMessageDialog(null, "No hubo cincidencias");
 
 			}
 		});
@@ -205,8 +233,8 @@ public class Busqueda extends JFrame {
 		return tabla.getSelectedRowCount() == 0 || tabla.getSelectedColumnCount() == 0;
 	}
 
-	private List<Reserva> buscar(String busqueda) {
-		return reservaController.buscar(busqueda);
+	private List<Reserva> buscar(String busqueda, String campo) {
+		return reservaController.buscar(busqueda, campo);
 	}
 
 	private void eliminar() {
@@ -338,9 +366,14 @@ public class Busqueda extends JFrame {
 		crearNombresColumnasReservas();
 		List<Huesped> huespedes = this.huespedController.listar();
 
-		huespedes.forEach(huesped -> modeloHuesped.addRow(new Object[] { huesped.getId(), huesped.getApellido(),
-				huesped.getNombre(), huesped.getNacimiento().toString(), huesped.getNacionalidad(),
-				huesped.getTelefono(), huesped.getId_reserva() }));
+		huespedes.stream().sorted(Comparator.comparing(Huesped::getApellido))
+				.forEach(huesped -> modeloHuesped.addRow(new Object[] { huesped.getId(), huesped.getApellido(),
+						huesped.getNombre(), huesped.getNacimiento().toString(), huesped.getNacionalidad(),
+						huesped.getTelefono(), huesped.getId_reserva() }));
+
+//		huespedes.forEach(huesped -> modeloHuesped.addRow(new Object[] { huesped.getId(), huesped.getApellido(),
+//				huesped.getNombre(), huesped.getNacimiento().toString(), huesped.getNacionalidad(),
+//				huesped.getTelefono(), huesped.getId_reserva() }));
 	}
 
 	private void cargarTablaReserva() {
@@ -349,28 +382,33 @@ public class Busqueda extends JFrame {
 
 		List<Reserva> reservas = this.reservaController.listar();
 
-		reservas.forEach(reserva -> modeloReserva.addRow(new Object[] { reserva.getId(),
-				reserva.getIngreso().toString(), reserva.getEgreso().toString(), reserva.getPago(), reserva.getPrecio(),
-				reserva.getHuesped().getApellido() + " " + reserva.getHuesped().getNombre(),
-				reserva.getHuesped().getId() }));
+		reservas.stream().sorted(Comparator.comparing(Reserva::getIngreso)).forEach(
+				reserva -> modeloReserva.addRow(new Object[] { reserva.getId(), reserva.getIngreso().toString(),
+						reserva.getEgreso().toString(), reserva.getPago(), reserva.getPrecio(),
+						reserva.getHuesped().getApellido() + " " + reserva.getHuesped().getNombre(),
+						reserva.getHuesped().getId() }));
+
+//		reservas.forEach(reserva -> modeloReserva.addRow(new Object[] { reserva.getId(),
+//				reserva.getIngreso().toString(), reserva.getEgreso().toString(), reserva.getPago(), reserva.getPrecio(),
+//				reserva.getHuesped().getApellido() + " " + reserva.getHuesped().getNombre(),
+//				reserva.getHuesped().getId() }));
 	}
-	
+
 	private void cargarTablasBusqueda(List<Reserva> reservas) {
-		
+
 		crearNombresColumnasReservas();
 		crearNombresColumnasHuesped();
-		
+
 		reservas.forEach(reserva -> modeloReserva.addRow(new Object[] { reserva.getId(),
 				reserva.getIngreso().toString(), reserva.getEgreso().toString(), reserva.getPago(), reserva.getPrecio(),
 				reserva.getHuesped().getApellido() + " " + reserva.getHuesped().getNombre(),
 				reserva.getHuesped().getId() }));
-		
-		reservas.forEach(reserva -> modeloHuesped.addRow(new Object[] { reserva.getHuesped().getId(), reserva.getHuesped().getApellido(),
-				reserva.getHuesped().getNombre(), reserva.getHuesped().getNacimiento().toString(), reserva.getHuesped().getNacionalidad(),
+
+		reservas.forEach(reserva -> modeloHuesped.addRow(new Object[] { reserva.getHuesped().getId(),
+				reserva.getHuesped().getApellido(), reserva.getHuesped().getNombre(),
+				reserva.getHuesped().getNacimiento().toString(), reserva.getHuesped().getNacionalidad(),
 				reserva.getHuesped().getTelefono(), reserva.getHuesped().getId_reserva() }));
-		
-		
-		
+
 	}
 
 	public void crearNombresColumnasHuesped() {

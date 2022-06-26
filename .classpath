@@ -14,5 +14,7 @@
 	<classpathentry kind="lib" path="C:/Users/EDICION/.m2/repository/com/mchange/c3p0/0.9.5.5/c3p0-0.9.5.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/EDICION/.m2/repository/com/mchange/mchange-commons-java/0.2.20/mchange-commons-java-0.2.20.jar"/>
 	<classpathentry kind="lib" path="C:/Users/EDICION/.m2/repository/com/google/protobuf/protobuf-java/3.11.4/protobuf-java-3.11.4.jar"/>
+	<classpathentry kind="lib" path="jgoodies-common-1.8.0.jar" sourcepath="jgoodies-common-1.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
