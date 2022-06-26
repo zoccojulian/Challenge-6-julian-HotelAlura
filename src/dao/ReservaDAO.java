@@ -144,4 +144,41 @@ public class ReservaDAO {
 		
 	}
 
+	public List<Reserva> buscar(String busqueda) {
+		List<Reserva> resultado = new ArrayList<Reserva>();
+		try {
+
+			final PreparedStatement statement = con.prepareStatement("SELECT R.ID, R.INGRESO, R.EGRESO, R.PAGO,"
+					+ " R.PRECIO, H.ID, H.NOMBRE, H.APELLIDO, H.NACIMIENTO, H.NACIONALIDAD,  H.TELEFONO, H.ID_RESERVA FROM RESERVA R INNER JOIN"
+					+ " HUESPED H ON H.ID_RESERVA = R.ID WHERE H.NOMBRE LIKE '%' ? '%'");
+			
+			statement.setString(1, busqueda);
+
+			try (statement) {
+				statement.execute();
+
+				ResultSet resultSet = statement.getResultSet();
+
+				while (resultSet.next()) {
+		
+					
+					Reserva fila = new Reserva(resultSet.getInt("R.ID"), resultSet.getDate("R.INGRESO").toLocalDate(),
+							resultSet.getDate("R.EGRESO").toLocalDate(), resultSet.getString("R.PAGO"),
+							new Huesped(resultSet.getInt("H.ID"), resultSet.getString("H.NOMBRE"),
+									resultSet.getString("H.APELLIDO"), resultSet.getDate("H.NACIMIENTO").toLocalDate(),
+									resultSet.getString("H.NACIONALIDAD"),resultSet.getString("H.TELEFONO"),resultSet.getInt("H.ID_RESERVA")),
+							Double.parseDouble(resultSet.getBigDecimal("R.PRECIO").toString()));
+					resultado.add(fila);
+				}
+
+				return resultado;
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		
+	}
+
 }

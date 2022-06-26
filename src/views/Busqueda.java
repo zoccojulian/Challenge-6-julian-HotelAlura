@@ -156,6 +156,10 @@ public class Busqueda extends JFrame {
 
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				List<Reserva> encontrado = buscar(txtBuscar.getText());
+				limpiarTablas();
+				cargarTablasBusqueda(encontrado);
+
 			}
 		});
 
@@ -199,6 +203,10 @@ public class Busqueda extends JFrame {
 
 	private boolean tieneFilaElegida(JTable tabla) {
 		return tabla.getSelectedRowCount() == 0 || tabla.getSelectedColumnCount() == 0;
+	}
+
+	private List<Reserva> buscar(String busqueda) {
+		return reservaController.buscar(busqueda);
 	}
 
 	private void eliminar() {
@@ -262,7 +270,6 @@ public class Busqueda extends JFrame {
 				return;
 			} else {
 				int fila = tbHuespedes.getSelectedRow();
-
 				Integer id = Integer.valueOf(tbHuespedes.getValueAt(fila, 0).toString());
 				String apellido = tbHuespedes.getValueAt(fila, 1).toString();
 				String nombre = tbHuespedes.getValueAt(fila, 2).toString();
@@ -328,12 +335,7 @@ public class Busqueda extends JFrame {
 	}
 
 	private void cargarTablaHuesped() {
-		// CREA LOS NOMBRES DE LAS COLUMNAS
-		String[] columnas = new String[modeloHuesped.getColumnCount()];
-		for (int i = 0; i < modeloHuesped.getColumnCount(); i++) {
-			columnas[i] = modeloHuesped.getColumnName(i);
-		}
-		modeloHuesped.addRow(columnas);
+		crearNombresColumnasReservas();
 		List<Huesped> huespedes = this.huespedController.listar();
 
 		huespedes.forEach(huesped -> modeloHuesped.addRow(new Object[] { huesped.getId(), huesped.getApellido(),
@@ -343,12 +345,7 @@ public class Busqueda extends JFrame {
 
 	private void cargarTablaReserva() {
 
-		// CREA LOS NOMBRES DE LAS COLUMNAS
-		String[] columnas = new String[modeloReserva.getColumnCount()];
-		for (int i = 0; i < modeloReserva.getColumnCount(); i++) {
-			columnas[i] = modeloReserva.getColumnName(i);
-		}
-		modeloReserva.addRow(columnas);
+		crearNombresColumnasHuesped();
 
 		List<Reserva> reservas = this.reservaController.listar();
 
@@ -357,10 +354,48 @@ public class Busqueda extends JFrame {
 				reserva.getHuesped().getApellido() + " " + reserva.getHuesped().getNombre(),
 				reserva.getHuesped().getId() }));
 	}
+	
+	private void cargarTablasBusqueda(List<Reserva> reservas) {
+		
+		crearNombresColumnasReservas();
+		crearNombresColumnasHuesped();
+		
+		reservas.forEach(reserva -> modeloReserva.addRow(new Object[] { reserva.getId(),
+				reserva.getIngreso().toString(), reserva.getEgreso().toString(), reserva.getPago(), reserva.getPrecio(),
+				reserva.getHuesped().getApellido() + " " + reserva.getHuesped().getNombre(),
+				reserva.getHuesped().getId() }));
+		
+		reservas.forEach(reserva -> modeloHuesped.addRow(new Object[] { reserva.getHuesped().getId(), reserva.getHuesped().getApellido(),
+				reserva.getHuesped().getNombre(), reserva.getHuesped().getNacimiento().toString(), reserva.getHuesped().getNacionalidad(),
+				reserva.getHuesped().getTelefono(), reserva.getHuesped().getId_reserva() }));
+		
+		
+		
+	}
+
+	public void crearNombresColumnasHuesped() {
+		// CREA LOS NOMBRES DE LAS COLUMNAS
+		String[] columnas = new String[modeloReserva.getColumnCount()];
+		for (int i = 0; i < modeloReserva.getColumnCount(); i++) {
+			columnas[i] = modeloReserva.getColumnName(i);
+		}
+		modeloReserva.addRow(columnas);
+	}
+
+	public void crearNombresColumnasReservas() {
+		// CREA LOS NOMBRES DE LAS COLUMNAS
+		String[] columnas = new String[modeloHuesped.getColumnCount()];
+		for (int i = 0; i < modeloHuesped.getColumnCount(); i++) {
+			columnas[i] = modeloHuesped.getColumnName(i);
+		}
+		modeloHuesped.addRow(columnas);
+	}
 
 	private void limpiarTablas() {
-		modeloHuesped.getDataVector().clear();
-		modeloReserva.getDataVector().clear();
+//		modeloHuesped.getDataVector().clear();
+//		modeloReserva.getDataVector().clear();
+		modeloHuesped.setRowCount(0);
+		modeloReserva.setRowCount(0);
 	}
 
 	private class TablaHuesped extends JTable {
@@ -384,7 +419,7 @@ public class Busqueda extends JFrame {
 		}
 
 	}
-	
+
 	private class TablaReservas extends JTable {
 
 		@Override

@@ -33,8 +33,6 @@ public class HuespedController {
 		huespedDAO.modificar(huespedModificacion);
 		
 	}
-	
-	
-	
+
 	
 }

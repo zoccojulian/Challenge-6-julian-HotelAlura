@@ -37,6 +37,11 @@ public class ReservaController {
 		this.reservaDAO.modificar(reserva);
 		
 	}
+
+	public List<Reserva> buscar(String busqueda) {
+		return reservaDAO.buscar(busqueda);
+		
+	}
 	
 	
 	
