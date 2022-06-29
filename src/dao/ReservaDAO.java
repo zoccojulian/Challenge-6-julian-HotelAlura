@@ -95,12 +95,31 @@ public class ReservaDAO {
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
-				throw new RuntimeException(e);
+				throw new RuntimeException(e1);
 			}
 			throw new RuntimeException(e);
-
 		}
-
+		
+		try {
+			con.close();
+		} catch (SQLException e1) {
+			throw new RuntimeException(e1);
+		}
+		
+	}
+	
+	public void cancelarConexion() {
+		try {
+			con.rollback();
+			System.out.println("cancelo");
+		}catch (SQLException e1) {
+			throw new RuntimeException(e1);
+		}
+		try {
+			con.close();
+		} catch (SQLException e1) {
+			throw new RuntimeException(e1);
+		}
 	}
 
 	public void eliminar(int idReserva) {
@@ -194,5 +213,7 @@ public class ReservaDAO {
 
 		
 	}
+
+
 
 }

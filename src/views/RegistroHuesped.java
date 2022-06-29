@@ -154,6 +154,15 @@ public class RegistroHuesped extends JFrame {
 		});
 		
 		
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				reservaController.cancelarConexion();
+				MenuUsuario usuario = new MenuUsuario();
+				usuario.setVisible(true);
+				dispose();
+			}
+		});
+		
 		btnGuardar.setIcon(new ImageIcon(RegistroHuesped.class.getResource("/imagenes/disquete.png")));
 		btnGuardar.setBackground(SystemColor.menu);
 		btnGuardar.setBounds(700, 543, 54, 41);
@@ -162,6 +171,7 @@ public class RegistroHuesped extends JFrame {
 		JButton btnSalir = new JButton("");
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				reservaController.cancelarConexion();
 				MenuUsuario usuario = new MenuUsuario();
 				usuario.setVisible(true);
 				dispose();

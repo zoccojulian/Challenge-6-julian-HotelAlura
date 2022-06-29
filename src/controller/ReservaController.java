@@ -43,6 +43,11 @@ public class ReservaController {
 		
 	}
 
+	public void cancelarConexion() {
+		this.reservaDAO.cancelarConexion();
+		
+	}
+
 
 	
 	
